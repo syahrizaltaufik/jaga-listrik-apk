@@ -1,0 +1,77 @@
+=================================
+FILE: app/src/main/res/drawable/ic_launcher_foreground.xml
+=================================
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#3BD4FF"
+        android:strokeWidth="2.5"
+        android:pathData="M54,21 a33,33 0 1,0 0.01,0 Z" />
+    <path
+        android:fillColor="#FFD23F"
+        android:pathData="M58,26 L34,58 L50,58 L46,82 L74,50 L58,50 Z" />
+</vector>
+
+
+=================================
+FILE: app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml
+=================================
+<?xml version="1.0" encoding="utf-8"?>
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+    <background android:drawable="@color/ic_launcher_background" />
+    <foreground android:drawable="@drawable/ic_launcher_foreground" />
+</adaptive-icon>
+
+
+=================================
+FILE: app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml
+=================================
+<?xml version="1.0" encoding="utf-8"?>
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+    <background android:drawable="@color/ic_launcher_background" />
+    <foreground android:drawable="@drawable/ic_launcher_foreground" />
+</adaptive-icon>
+
+
+=================================
+FILE: app/src/main/res/values/colors.xml
+=================================
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="ic_launcher_background">#0A1426</color>
+</resources>
+
+
+=================================
+FILE: app/src/main/AndroidManifest.xml
+=================================
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+  <uses-permission android:name="android.permission.INTERNET"/>
+  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+  <application android:icon="@mipmap/ic_launcher" android:roundIcon="@mipmap/ic_launcher_round" android:label="Jaga Listrik Nusantara" android:theme="@style/AppTheme" android:allowBackup="true">
+    <activity android:name=".MainActivity" android:exported="true" android:screenOrientation="fullSensor" android:configChanges="orientation|screenSize|keyboardHidden">
+      <intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter>
+    </activity>
+  </application>
+</manifest>
+
+
+=================================
+FILE: app/build.gradle
+=================================
+plugins { id 'com.android.application' }
+android {
+    namespace 'id.jln.game'
+    compileSdk 34
+    defaultConfig { applicationId 'id.jln.game'; minSdk 26; targetSdk 34; versionCode 1; versionName '1.0' }
+    buildTypes { release { minifyEnabled false; signingConfig signingConfigs.debug } }
+    compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
+}
+
+
