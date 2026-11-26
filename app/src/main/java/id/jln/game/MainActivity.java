@@ -18,14 +18,18 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 public class MainActivity extends Activity {
+  // Halaman artifact di claude.ai (mode online, perlu login akun Claude)
   static final String ONLINE_URL = "https://claude.ai/artifact/196ERJsKkj1hEmXWHEKGdd";
   static final String LOCAL_URL = "file:///android_asset/index.html";
+  // Alamat file game terbaru (HTML tunggal) untuk pembaruan mode offline.
+  // GANTI dengan alamat milikmu, mis. GitHub Pages: https://USERNAME.github.io/REPO/index.html
   static final String UPDATE_URL = "https://syahrizaltaufik.github.io/jaga-listrik/index.html";
   WebView w;
   boolean login=false;
 
   File upd() { return new File(getFilesDir(), "index-update.html"); }
 
+  /** Muat game lokal: pakai salinan hasil unduhan bila lebih baru dari APK, selain itu bawaan APK. */
   void loadLocal() {
     try {
       File f = upd();
@@ -40,7 +44,9 @@ public class MainActivity extends Activity {
     w.loadUrl(LOCAL_URL);
   }
 
+  /** Unduh versi terbaru di latar belakang; dipakai pada pembukaan berikutnya. */
   void checkUpdate() {
+    
     new Thread(() -> {
       try {
         HttpURLConnection c = (HttpURLConnection) new URL(UPDATE_URL).openConnection();
@@ -67,12 +73,14 @@ public class MainActivity extends Activity {
     s.setDomStorageEnabled(true);
     s.setJavaScriptCanOpenWindowsAutomatically(true);
     s.setMediaPlaybackRequiresUserGesture(false);
+    // Hilangkan penanda "wv" agar login tidak ditolak sebagai WebView
     s.setUserAgentString(s.getUserAgentString().replace("; wv", "").replace("Version/4.0 ", ""));
     CookieManager cm = CookieManager.getInstance();
     cm.setAcceptCookie(true);
     cm.setAcceptThirdPartyCookies(w, true);
     w.setWebViewClient(new WebViewClient() {
       @Override public void onPageFinished(WebView v, String url) {
+        // Setelah masuk akun Claude di dalam aplikasi, otomatis kembali ke game online
         if (login && url != null && url.startsWith("https://claude.ai/") && !url.contains("login") && !url.contains("magic") && !url.contains("oauth") && !url.contains("verify") && !url.contains("onboarding")) {
           login = false; v.loadUrl(ONLINE_URL);
         }
@@ -92,14 +100,7 @@ public class MainActivity extends Activity {
     setContentView(w);
     if (!online()) { loadLocal(); return; }
     checkUpdate();
-    new AlertDialog.Builder(this)
-      .setTitle("Jaga Listrik Nusantara")
-      .setMessage("Pilih mode permainan.\n\nOnline: dunia bersama teman. Pertama kali, pilih Masuk akun Claude dan masuk dengan email, bukan Google.\nOffline: single-player, tanpa internet.")
-      .setCancelable(false)
-      .setPositiveButton("Main Online", (d, i) -> w.loadUrl(ONLINE_URL))
-      .setNegativeButton("Main Offline", (d, i) -> loadLocal())
-      .setNeutralButton("Masuk akun Claude", (d, i) -> { login = true; w.loadUrl("https://claude.ai/login"); })
-      .show();
+    loadLocal(); // game lokal; mode online memakai server Firebase dari dalam game
   }
 
   boolean online() {
